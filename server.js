@@ -1,29 +1,27 @@
+// server-express.js
 const express = require('express');
 const app = express();
 
-// Функция для вычисления НОД
 function gcd(a, b) {
     return b === 0 ? a : gcd(b, a % b);
 }
 
-// Функция для вычисления НОК
 function lcm(a, b) {
     return Math.abs(a * b) / gcd(a, b);
 }
 
-// Функция для проверки натурального числа
 function isNaturalNumber(num) {
     const n = Number(num);
     return Number.isInteger(n) && n > 0;
 }
 
+// CORS middleware
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET');
     next();
 });
 
-// Обработчик GET запроса
 app.get('*', (req, res) => {
     const x = req.query.x;
     const y = req.query.y;
