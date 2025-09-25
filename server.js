@@ -1,49 +1,32 @@
-const express = require('express');
+import express from "express";
+
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Функция для вычисления НОД
+// Функция НОД
 function gcd(a, b) {
-    return b === 0 ? a : gcd(b, a % b);
+  return b === 0 ? a : gcd(b, a % b);
 }
 
-// Функция для вычисления НОК
+// Функция НОК
 function lcm(a, b) {
-    return Math.abs(a * b) / gcd(a, b);
+  if (a === 0 || b === 0) return 0; // по условию 0 считается натуральным
+  return (a * b) / gcd(a, b);
 }
 
-// Функция для проверки натурального числа
-function isNaturalNumber(num) {
-    const n = Number(num);
-    return Number.isInteger(n) && n > 0;
-}
+app.get("/yaroslav76071_mail_ru", (req, res) => {
+  const x = Number(req.query.x);
+  const y = Number(req.query.y);
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET');
-    next();
+  // Проверка: x и y должны быть целыми и >= 0
+  if (!Number.isInteger(x) || !Number.isInteger(y) || x < 0 || y < 0) {
+    return res.send("NaN");
+  }
+
+  const result = lcm(x, y);
+  res.send(result.toString());
 });
 
-// Обработчик GET запроса
-app.get('*', (req, res) => {
-    const x = req.query.x;
-    const y = req.query.y;
-    
-    if (x === undefined || y === undefined) {
-        return res.status(400).send('Missing parameters x and y');
-    }
-    
-    if (!isNaturalNumber(x) || !isNaturalNumber(y)) {
-        return res.send('NaN');
-    }
-    
-    const xNum = parseInt(x, 10);
-    const yNum = parseInt(y, 10);
-    const result = lcm(xNum, yNum);
-    
-    res.send(result.toString());
-});
-
-const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}/`);
+  console.log(`✅ Server running on http://localhost:${PORT}/yaroslav76071_mail_ru?x=0&y=18`);
 });
